@@ -23,6 +23,7 @@ class Program
         _client = new DiscordSocketClient();
         _client.Log += Log;
         _client.MessageReceived += HandleCommandAsync;
+        _client.MessageReceived += OnMessageRecived;
 
         string ?token = _config["DiscordToken"];    
         await _client.LoginAsync(TokenType.Bot, token);
@@ -39,11 +40,24 @@ class Program
 
     private async Task HandleCommandAsync(SocketMessage message)
     {
+
         if(message.Author.IsBot) return;
-        Console.WriteLine(message.Content + message.Author.Username);
+
         if(message.Content.ToLower() == "!Ping")
         {
             await message.Channel.SendMessageAsync("Pong!");
         }
+        else
+        {
+            Console.WriteLine("HAT HALT NICHT FUNKTIONIERT");
+        }
+    }
+    private async Task OnMessageRecived(SocketMessage message)
+    {
+        var author = message.Author.Username;  // Verfasser der Nachricht
+        var messageType = message.GetType().Name;  // Typ der Nachricht (SocketMessage oder SocketUserMessage)
+        var content = message.Content;        // Inhalt der Nachricht
+        Console.WriteLine($"Verfasser: {author}, Typ: {messageType}, Inhalt: {content}");
+        
     }
 }   
